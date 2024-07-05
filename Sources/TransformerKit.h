@@ -1,6 +1,6 @@
-// TTTStringTransformers.h
+// TransformerKit.h
 //
-// Copyright (c) 2012 Mattt Thompson (http://mattt.me)
+// Copyright (c) 2012 - 2018 Mattt (https://mat.tt)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,58 +20,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
+#ifndef _TRANSFORMER_KIT_
+    #define _TRANSFORMER_KIT_
 
-/**
- 
- */
-extern NSString * const TTTCapitalizedStringTransformerName;
-
-/**
- 
- */
-extern NSString * const TTTUppercaseStringTransformerName;
-
-/**
- 
- */
-extern NSString * const TTTLowercaseStringTransformerName;
-
-/**
- 
- */
-extern NSString * const TTTCamelCaseStringTransformerName;
-
-/**
- 
- */
-extern NSString * const TTTLlamaCaseStringTransformerName;
-
-/**
- 
- */
-extern NSString * const TTTSnakeCaseStringTransformerName;
-
-/**
- 
- */
-extern NSString * const TTTTrainCaseStringTransformerName;
-
-/**
- 
- */
-extern NSString * const TTTReverseStringTransformerName;
-
-/**
- 
- */
-extern NSString * const TTTRemoveDiacriticStringTransformerName;
-
-/**
- 
- */
-extern NSString * const TTTTransliterateStringToLatinTransformerName;
-
-@interface TTTStringTransformers : NSObject
-
-@end
+    #import "TTTDateTransformers.h"
+    #import "TTTImageTransformers.h"
+    #import "TTTStringTransformers.h"
+    #import "TTTJSONTransformer.h"
+    #if __MAC_OS_X_VERSION_MIN_REQUIRED
+    #import "TTTDataTransformers.h"
+    #import "TTTCryptographyTransformers.h"
+    #endif
+    #import "NSValueTransformer+TransformerKit.h"
+#endif

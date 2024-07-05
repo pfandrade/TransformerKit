@@ -1,6 +1,6 @@
-// TTTImageTransformers.h
+// NSValueTransformer+TransformerKit.h
 //
-// Copyright (c) 2012 Mattt Thompson (http://mattt.me)
+// Copyright (c) 2012 - 2018 Mattt (https://mat.tt)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,36 +20,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
-#if defined(UIKIT_EXTERN) || defined(_APPKITDEFINES_H)
+NS_ASSUME_NONNULL_BEGIN
 
-#define kTTTJPEGRepresentationCompressionQuality 0.75
+@interface NSValueTransformer (TransformerKit)
 
-/**
- 
- */
-extern NSString * const TTTPNGRepresentationImageTransformerName;
++ (BOOL)registerValueTransformerWithName:(NSString *)name
+                   transformedValueClass:(Class)transformedValueClass
+      returningTransformedValueWithBlock:(id (^)(id value))transformedValueBlock
+NS_SWIFT_NAME(registerValueTransformer(named:producing:with:));
 
-/**
- 
- */
-extern NSString * const TTTJPEGRepresentationImageTransformerName;
-
-#if __MAC_OS_X_VERSION_MIN_REQUIRED
-/**
- 
- */
-extern NSString * const TTTGIFRepresentationImageTransformerName;
-
-/**
- 
- */
-extern NSString * const TTTTIFFRepresentationImageTransformerName;
-#endif
-
-@interface TTTImageTransformers : NSObject
++ (BOOL)registerValueTransformerWithName:(NSString *)name
+                   transformedValueClass:(Class)transformedValueClass
+      returningTransformedValueWithBlock:(id (^)(id value))transformedValueBlock
+  allowingReverseTransformationWithBlock:(nullable id (^)(id value))reverseTransformedValueBlock
+NS_SWIFT_NAME(registerValueTransformer(named:producing:forward:reverse:));;
 
 @end
 
-#endif
+NS_ASSUME_NONNULL_END

@@ -1,6 +1,6 @@
-// NSValueTransformer+TransformerKit.h
-//
-// Copyright (c) 2012 Mattt Thompson (http://mattt.me)
+// TTTDateTransformers.h
+// 
+// Copyright (c) 2012 - 2018 Mattt (https://mat.tt)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -8,10 +8,10 @@
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-//
+// 
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,17 +20,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
+@import Foundation;
+#import "NSValueTransformerName.h"
 
-@interface NSValueTransformer (TransformerKit)
+NS_ASSUME_NONNULL_BEGIN
 
-+ (BOOL)registerValueTransformerWithName:(NSString *)name
-                   transformedValueClass:(Class)transformedValueClass
-      returningTransformedValueWithBlock:(id (^)(id value))transformedValueBlock;
+/**
+ @warning Because `time.h` represents timestamps as 32-bit integers, times before 00:00::00 UTC on Thursday, January 1, 1970 and after 03:14:07 UTC on Tuesday, 19 January 2038 cannot be represented.
+ */
+extern NSValueTransformerName const TTTISO8601DateTransformerName NS_SWIFT_NAME(iso8601DateTransformerName);
 
-+ (BOOL)registerValueTransformerWithName:(NSString *)name
-                   transformedValueClass:(Class)transformedValueClass
-      returningTransformedValueWithBlock:(id (^)(id value))transformedValueBlock
-  allowingReverseTransformationWithBlock:(id (^)(id value))reverseTransformedValueBlock;
+/**
+ @warning Because `time.h` represents timestamps as 32-bit integers, times before 00:00::00 UTC on Thursday, January 1, 1970 and after 03:14:07 UTC on Tuesday, 19 January 2038 cannot be represented.
+ */
+extern NSValueTransformerName const TTTRFC2822DateTransformerName NS_SWIFT_NAME(rfc2822DateTransformerName);
+
+@interface TTTDateTransformers : NSObject
 
 @end
+
+NS_ASSUME_NONNULL_END

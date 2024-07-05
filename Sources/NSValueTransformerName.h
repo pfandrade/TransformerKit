@@ -1,9 +1,6 @@
+// NSValueTransformerName.h
 //
-//  TTTDataTransformers.h
-//  TransformerKit Example
-//
-//  Created by Paulo Andrade on 7/15/13.
-//  Copyright (c) 2013 Mattt Thompson. All rights reserved.
+// Copyright (c) 2012 - 2018 Mattt (https://mat.tt)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,11 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+@import Darwin.Availability;
 
-#import <Foundation/Foundation.h>
+#ifndef NSValueTransformerName_h
+#define NSValueTransformerName_h
 
-extern NSString * const TTTHexDataTransformerName;
+#if !defined(MAC_OS_X_VERSION_10_10) || !defined(__IPHONE_10_0)
+typedef NSString *NSValueTransformerName;
+#endif
 
-@interface TTTDataTransformers : NSObject
-
-@end
+#endif /* NSValueTransformerName_h */

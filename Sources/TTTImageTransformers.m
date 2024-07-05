@@ -1,6 +1,6 @@
 // TTTImageTransformers.m
 //
-// Copyright (c) 2012 Mattt Thompson (http://mattt.me)
+// Copyright (c) 2012 - 2018 Mattt (https://mat.tt)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,25 +24,32 @@
 
 #import "NSValueTransformer+TransformerKit.h"
 
-#if defined(UIKIT_EXTERN) || defined(_APPKITDEFINES_H)
-
-NSString * const TTTPNGRepresentationImageTransformerName = @"TTTPNGRepresentationImageTransformer";
-NSString * const TTTJPEGRepresentationImageTransformerName = @"TTTJPEGRepresentationImageTransformer";
-
-#if __MAC_OS_X_VERSION_MIN_REQUIRED
-NSString * const TTTGIFRepresentationImageTransformerName = @"TTTGIFRepresentationImageTransformer";
-NSString * const TTTTIFFRepresentationImageTransformerName = @"TTTTIFFRepresentationImageTransformer";
-#endif
-
 #if __IPHONE_OS_VERSION_MIN_REQUIRED
 #import <UIKit/UIKit.h>
 #elif __MAC_OS_X_VERSION_MIN_REQUIRED
 #import <AppKit/AppKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 static inline NSData * NSImageRepresentationWithType(NSImage *image, NSBitmapImageFileType type, NSDictionary *properties) {
     NSBitmapImageRep *bitmap = [[NSBitmapImageRep alloc] initWithFocusedViewRect:NSMakeRect(0.0f, 0.0f, image.size.width, image.size.height)];
     return [bitmap representationUsingType:type properties:properties];
 }
+
+NS_ASSUME_NONNULL_END
+
+#endif
+
+NS_ASSUME_NONNULL_BEGIN
+
+#if defined(UIKIT_EXTERN) || defined(_APPKITDEFINES_H)
+
+NSValueTransformerName const TTTPNGRepresentationImageTransformerName = @"TTTPNGRepresentationImageTransformer";
+NSValueTransformerName const TTTJPEGRepresentationImageTransformerName = @"TTTJPEGRepresentationImageTransformer";
+
+#if __MAC_OS_X_VERSION_MIN_REQUIRED
+NSValueTransformerName const TTTGIFRepresentationImageTransformerName = @"TTTGIFRepresentationImageTransformer";
+NSValueTransformerName const TTTTIFFRepresentationImageTransformerName = @"TTTTIFFRepresentationImageTransformer";
 #endif
 
 @implementation TTTImageTransformers
@@ -59,7 +66,7 @@ static inline NSData * NSImageRepresentationWithType(NSImage *image, NSBitmapIma
 #if __IPHONE_OS_VERSION_MIN_REQUIRED
             return UIImagePNGRepresentation(value);
 #elif __MAC_OS_X_VERSION_MIN_REQUIRED
-            return NSImageRepresentationWithType(value, NSPNGFileType, nil);
+            return NSImageRepresentationWithType(value, NSPNGFileType, @{});
 #endif
         } allowingReverseTransformationWithBlock:^id(id value) {
 #if __IPHONE_OS_VERSION_MIN_REQUIRED
@@ -80,18 +87,18 @@ static inline NSData * NSImageRepresentationWithType(NSImage *image, NSBitmapIma
             return [[imageClass alloc] initWithData:value scale:[[UIScreen mainScreen] scale]];
 #elif __MAC_OS_X_VERSION_MIN_REQUIRED
             return [[imageClass alloc] initWithData:value];
-#endif        
+#endif
         }];
 
 #if __MAC_OS_X_VERSION_MIN_REQUIRED
         [NSValueTransformer registerValueTransformerWithName:TTTGIFRepresentationImageTransformerName transformedValueClass:imageClass returningTransformedValueWithBlock:^id(id value) {
-            return NSImageRepresentationWithType(value, NSGIFFileType, nil);
+            return NSImageRepresentationWithType(value, NSGIFFileType, @{});
         } allowingReverseTransformationWithBlock:^id(id value) {
             return [[imageClass alloc] initWithData:value];
         }];
 
         [NSValueTransformer registerValueTransformerWithName:TTTTIFFRepresentationImageTransformerName transformedValueClass:imageClass returningTransformedValueWithBlock:^id(id value) {
-            return NSImageRepresentationWithType(value, NSTIFFFileType, nil);
+            return NSImageRepresentationWithType(value, NSTIFFFileType, @{});
         } allowingReverseTransformationWithBlock:^id(id value) {
             return [[imageClass alloc] initWithData:value];
         }];
@@ -102,3 +109,5 @@ static inline NSData * NSImageRepresentationWithType(NSImage *image, NSBitmapIma
 @end
 
 #endif
+
+NS_ASSUME_NONNULL_END

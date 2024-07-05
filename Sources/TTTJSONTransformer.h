@@ -1,6 +1,6 @@
-// TTTDateTransformers.h
-// 
-// Copyright (c) 2013 Mattt Thompson
+// TTTJSONTransformer.h
+//
+// Copyright (c) 2012 - 2018 Mattt (https://mat.tt)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -8,10 +8,10 @@
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,13 +20,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
+@import Foundation;
+#import "NSValueTransformerName.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  
  */
-extern NSString * const TTTISO8601DateTransformerName;
+extern NSValueTransformerName const TTTJSONTransformerName NS_SWIFT_NAME(jsonTransformerName);
 
-@interface TTTDateTransformers : NSObject
+/**
+ 
+ */
+@interface TTTJSONTransformer : NSValueTransformer
+
+/**
+ 
+ */
+@property (nonatomic, assign) NSJSONReadingOptions readingOptions;
+
+/**
+ 
+ */
+@property (nonatomic, assign) NSJSONWritingOptions writingOptions;
 
 @end
+
+NS_ASSUME_NONNULL_END

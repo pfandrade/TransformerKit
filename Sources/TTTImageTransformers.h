@@ -1,6 +1,6 @@
-// TransformerKit.h
+// TTTImageTransformers.h
 //
-// Copyright (c) 2012 Mattt Thompson (http://mattt.me)
+// Copyright (c) 2012 - 2018 Mattt (https://mat.tt)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,11 +20,46 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef _TRANSFORMER_KIT_
-    #define _TRANSFORMER_KIT_
-
-    #import "TTTDateTransformers.h"
-    #import "TTTImageTransformers.h"
-    #import "TTTStringTransformers.h"
-    #import "TTTDataTransformers.h"
+@import Foundation;
+#if __IPHONE_OS_VERSION_MIN_REQUIRED
+@import UIKit;
+#elif __MAC_OS_X_VERSION_MIN_REQUIRED
+@import AppKit;
 #endif
+#import "NSValueTransformerName.h"
+
+NS_ASSUME_NONNULL_BEGIN
+
+#if defined(UIKIT_EXTERN) || defined(_APPKITDEFINES_H)
+
+#define kTTTJPEGRepresentationCompressionQuality 0.75
+
+/**
+ 
+ */
+extern NSValueTransformerName const TTTPNGRepresentationImageTransformerName NS_SWIFT_NAME(pngRepresentationImageTransformerName);
+
+/**
+ 
+ */
+extern NSValueTransformerName const TTTJPEGRepresentationImageTransformerName NS_SWIFT_NAME(jpegRepresentationImageTransformerName);
+
+#if __MAC_OS_X_VERSION_MIN_REQUIRED
+/**
+ 
+ */
+extern NSValueTransformerName const TTTGIFRepresentationImageTransformerName NS_SWIFT_NAME(gifRepresentationImageTransformerName);
+
+/**
+ 
+ */
+extern NSValueTransformerName const TTTTIFFRepresentationImageTransformerName NS_SWIFT_NAME(tiffRepresentationImageTransformerName);
+#endif
+
+@interface TTTImageTransformers : NSObject
+
+@end
+
+#endif
+
+NS_ASSUME_NONNULL_END

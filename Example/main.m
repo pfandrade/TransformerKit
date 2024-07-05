@@ -1,5 +1,6 @@
 // main.m
-// Copyright (c) 2012 Mattt Thompson (http://mattt.me)
+//
+// Copyright (c) 2012 - 2018 Mattt (https://mat.tt)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,41 +21,64 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-
-#import "TransformerKit.h"
+#import <TransformerKit/TransformerKit.h>
 
 int main(int __unused argc, const char __unused *argv[]) {
     @autoreleasepool {
         [@{
-            @"Capitalized String" : TTTCapitalizedStringTransformerName,
-            @"Uppercase String" : TTTUppercaseStringTransformerName,
-            @"Lowercase String" : TTTLowercaseStringTransformerName,
-            @"Camel Case String" : TTTCamelCaseStringTransformerName,
-            @"Llama Case String" : TTTLlamaCaseStringTransformerName,
-            @"Snake Case String" : TTTSnakeCaseStringTransformerName,
-            @"Train Case String" : TTTTrainCaseStringTransformerName,
-            @"Reversed String" : TTTReverseStringTransformerName,
-            @"Rémövê Dîaçritics" : TTTRemoveDiacriticStringTransformerName,
-            @"ट्रांस्लितेराते स्ट्रिंग" : TTTTransliterateStringToLatinTransformerName,
-        } enumerateKeysAndObjectsUsingBlock:^(id __unused value, id __unused name, BOOL __unused *stop) {
-            NSLog(@"%@: %@", value, [[NSValueTransformer valueTransformerForName:name] transformedValue:value]);
-        }];
-
-        [@[TTTISO8601DateTransformerName] enumerateObjectsUsingBlock:^(id name, NSUInteger __unused idx, BOOL __unused *stop) {
+           @"Capitalized String" : TTTCapitalizedStringTransformerName,
+           @"Uppercase String" : TTTUppercaseStringTransformerName,
+           @"Lowercase String" : TTTLowercaseStringTransformerName,
+           @"Camel Case String" : TTTCamelCaseStringTransformerName,
+           @"Llama Case String" : TTTLlamaCaseStringTransformerName,
+           @"Snake Case String" : TTTSnakeCaseStringTransformerName,
+           @"Train Case String" : TTTTrainCaseStringTransformerName,
+           @"Reversed String" : TTTReverseStringTransformerName,
+           @"Rémövê Dîaçritics" : TTTRemoveDiacriticStringTransformerName,
+           @"ट्रांस्लितेराते स्ट्रिंग" : TTTTransliterateStringToLatinTransformerName,
+           @{@"key" : @"value"} : TTTJSONTransformerName
+           } enumerateKeysAndObjectsUsingBlock:^(__unused id value, __unused id name, __unused BOOL *stop) {
+               NSLog(@"%@: %@", value, [[NSValueTransformer valueTransformerForName:name] transformedValue:value]);
+           }];
+        
+        [@{
+           @"s\\v'ErStS": @"IPA-XSampa"
+           } enumerateKeysAndObjectsUsingBlock:^(__unused id value, __unused id transform, __unused BOOL *stop) {
+               NSLog(@"%@: %@", value, [TTTStringTransformerForICUTransform(transform) reverseTransformedValue:value]);
+           }];
+        
+        [@{
+           @"CamelCaseString" : TTTCamelCaseStringTransformerName,
+           @"llamaCaseString" : TTTLlamaCaseStringTransformerName,
+           @"snake_case_string" : TTTSnakeCaseStringTransformerName,
+           @"train-case-string" : TTTTrainCaseStringTransformerName,
+           @"gnirtS desreveR" : TTTReverseStringTransformerName,
+           } enumerateKeysAndObjectsUsingBlock:^(__unused id value, __unused id name, __unused BOOL *stop) {
+               NSLog(@"%@ (Reversed): %@", value, [[NSValueTransformer valueTransformerForName:name] reverseTransformedValue:value]);
+           }];
+        
+        [@[TTTISO8601DateTransformerName, TTTRFC2822DateTransformerName] enumerateObjectsUsingBlock:^(id name, __unused NSUInteger idx, __unused BOOL *stop) {
             NSValueTransformer *transformer = [NSValueTransformer valueTransformerForName:name];
             NSLog(@"%@ (Timestamp): %@", name, [transformer transformedValue:[NSDate date]]);
             NSLog(@"%@ (Date): %@", name, [transformer reverseTransformedValue:[transformer transformedValue:[NSDate date]]]);
         }];
-        
-        [@[TTTHexDataTransformerName] enumerateObjectsUsingBlock:^(id name, NSUInteger __unused idx, BOOL __unused *stop) {
-            NSString *exampleString = @"abcdef";
-            NSData *exampleData = [exampleString dataUsingEncoding:NSUTF8StringEncoding];
+
+        [@[TTTMD5TransformerName, TTTSHA1TransformerName, TTTSHA256TransformerName] enumerateObjectsUsingBlock:^(id name, __unused NSUInteger idx, __unused BOOL *stop) {
             NSValueTransformer *transformer = [NSValueTransformer valueTransformerForName:name];
-            NSLog(@"%@ (Hex): %@", name, [transformer transformedValue:exampleData]);
-            NSLog(@"%@ (Data): %@", name, [transformer reverseTransformedValue:[transformer transformedValue:exampleData]]);
+            NSLog(@"%@: %@", name, [transformer transformedValue:[name dataUsingEncoding:NSASCIIStringEncoding]]);
+        }];
+        
+        [@[TTTBase16EncodedDataTransformerName, TTTBase32EncodedDataTransformerName, TTTBase64EncodedDataTransformerName, TTTBase85EncodedDataTransformerName] enumerateObjectsUsingBlock:^(id name, __unused NSUInteger idx, __unused BOOL *stop) {
+            NSValueTransformer *transformer = [NSValueTransformer valueTransformerForName:name];
+            NSLog(@"%@: %@", name, [transformer transformedValue:[name dataUsingEncoding:NSASCIIStringEncoding]]);
+            
+            NSData *data = [name dataUsingEncoding:NSASCIIStringEncoding];
+            if (![[transformer reverseTransformedValue:[transformer transformedValue:data]] isEqualToData:data]) {
+                NSLog(@"Not equal!");
+            }
         }];
     }
-
+    
     return 0;
 }
 

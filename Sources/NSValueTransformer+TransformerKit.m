@@ -1,6 +1,6 @@
 // NSValueTransformer+TransformerKit.h
 //
-// Copyright (c) 2012 Mattt Thompson (http://mattt.me)
+// Copyright (c) 2012 - 2018 Mattt (https://mat.tt)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,8 +22,10 @@
 
 #import "NSValueTransformer+TransformerKit.h"
 
-#import <Availability.h>
-#import <objc/runtime.h>
+@import Darwin.Availability;
+@import ObjectiveC.runtime;
+
+NS_ASSUME_NONNULL_BEGIN
 
 @implementation NSValueTransformer (TransformerKit)
 
@@ -37,13 +39,9 @@
 + (BOOL)registerValueTransformerWithName:(NSString *)name
                    transformedValueClass:(Class)transformedValueClass
       returningTransformedValueWithBlock:(id (^)(id value))transformedValueBlock
-  allowingReverseTransformationWithBlock:(id (^)(id value))reverseTransformedValueBlock
+  allowingReverseTransformationWithBlock:(nullable id (^)(id value))reverseTransformedValueBlock
 {
-    NSParameterAssert(name);
-    NSParameterAssert(transformedValueClass);
-    NSParameterAssert(transformedValueBlock);
-    
-    if (objc_lookUpClass([name UTF8String])) {
+    if (objc_lookUpClass((const char * _Nonnull)[name UTF8String])) {
         return NO;
     }
     
@@ -51,7 +49,7 @@
         return NO;
     }
     
-    Class class = objc_allocateClassPair([NSValueTransformer class], [name UTF8String], 0);
+    Class class = objc_allocateClassPair([NSValueTransformer class], (const char * _Nonnull)[name UTF8String], 0);
     if (!class) {
         return NO;
     }
@@ -77,7 +75,9 @@
         });
 
         Method allowsReverseTransformationMethod;
-#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED) && (!defined(__IPHONE_5_0) || __IPHONE_OS_VERSION_MIN_REQUIRED <= __IPHONE_5_0)
+#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED) && (!defined(__IPHONE_5_0) || __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_5_0)
+        allowsReverseTransformationMethod = class_getClassMethod(class, allowsReverseTransformationSelector);
+#elif defined(MAC_OS_X_VERSION_MIN_REQUIRED) && (!defined(MAC_OS_X_VERSION_10_8) || MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_8)
         allowsReverseTransformationMethod = class_getClassMethod(class, allowsReverseTransformationSelector);
 #else
         allowsReverseTransformationMethod = class_getInstanceMethod(class, allowsReverseTransformationSelector);
@@ -95,10 +95,12 @@
     
     objc_registerClassPair(class);
     
-    NSValueTransformer *valueTransformer = [[class alloc] init];
+    NSValueTransformer *valueTransformer = [(NSValueTransformer *)[class alloc] init];
     [self setValueTransformer:valueTransformer forName:name];
 
     return YES;
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

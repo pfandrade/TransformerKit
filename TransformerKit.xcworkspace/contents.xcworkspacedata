@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:TransformerKit.playground">
+   </FileRef>
+   <FileRef
+      location = "group:TransformerKit.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Example/TransformerKit Example.xcodeproj">
    </FileRef>
 </Workspace>
